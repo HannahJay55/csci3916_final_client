@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { fetchMovies } from "../actions/movieActions";
 import { setMovie } from "../actions/movieActions";
 import {connect} from 'react-redux';
-import {Image, Nav} from 'react-bootstrap';
+import {Card, Image, Nav} from 'react-bootstrap';
 import { Carousel } from 'react-bootstrap';
 import { BsStarFill} from 'react-icons/bs'
 import {LinkContainer} from 'react-router-bootstrap';
@@ -43,9 +43,9 @@ class MovieList extends Component {
                                     <Nav.Link><Image className="image" src={movie.imageUrl} thumbnail /></Nav.Link>
                                 </LinkContainer>
                             </div>
-                            <Carousel.Caption>
+                            <Carousel.Caption style={{"background-color": '#000000A0'}}>
                                 <h3>{movie.title}</h3>
-                                <BsStarFill glyph={'star'} /> {movie.avgRating} &nbsp;&nbsp; {movie.releaseDate}
+                                <BsStarFill glyph={'star'} /> {movie.avgRating.toFixed(1)} &nbsp;&nbsp; {new Date(movie.releaseDate).getFullYear()}
                             </Carousel.Caption>
                         </Carousel.Item>
                     )}

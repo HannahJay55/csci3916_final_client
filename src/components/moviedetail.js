@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { fetchMovie } from "../actions/movieActions";
 import {connect} from 'react-redux';
-import {Card, ListGroup, ListGroupItem } from 'react-bootstrap';
+import {Card, ListGroup, ListGroupItem} from 'react-bootstrap';
 import { BsStarFill } from 'react-icons/bs'
 import { Image } from 'react-bootstrap';
+import Review from "./review";
 
 class MovieDetail extends Component {
 
@@ -15,11 +16,11 @@ class MovieDetail extends Component {
     }
 
     render() {
-        const DetailInfo = () => {
+        //const DetailInfo = () => {
             if (!this.props.selectedMovie) {
                 return <div>Loading....</div>
             }
-
+            //console.log(this.props.selectedMovie);
             return (
                 <Card>
                     <Card.Header>Movie Detail</Card.Header>
@@ -34,23 +35,26 @@ class MovieDetail extends Component {
                                     <b>{actor.actorName}</b> {actor.characterName}
                                 </p>)}
                         </ListGroupItem>
-                        <ListGroupItem><h4><BsStarFill/> {this.props.selectedMovie.avgRating}</h4></ListGroupItem>
+                        <ListGroupItem><h4><BsStarFill/> {this.props.selectedMovie.avgRating.toFixed(1)}</h4></ListGroupItem>
                     </ListGroup>
                     <Card.Body>
-                        {this.props.selectedMovie.reviews.map((review, i) =>
+                        {this.props.selectedMovie.reviewDetails.map((review, i) =>
                             <p key={i}>
                                 <b>{review.username}</b>&nbsp; {review.review}
                                 &nbsp;  <BsStarFill /> {review.rating}
                             </p>
                         )}
                     </Card.Body>
+                    <Card.Body>
+                        <Review movieId={this.props.movieId}/>
+                    </Card.Body>
                 </Card>
             )
-        }
+        //}
 
-        return (
+        /*return (
             <DetailInfo />
-        )
+        )*/
     }
 }
 
