@@ -3,7 +3,7 @@ import { submitLogin } from '../actions/authActions';
 import { connect } from 'react-redux';
 import { Form, Button } from 'react-bootstrap';
 
-class Login extends Component {
+class LoginOld extends Component {
 
     constructor(props) {
         super(props);
@@ -55,4 +55,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps)(Login);
+export default connect(mapStateToProps)(LoginOld);
