@@ -44,12 +44,14 @@ function stringAvatar(name, sx) {
 const Comments = ({commentsEnabled, enableComments, videoId}) => {
 
     const comments = useSelector(state => state.comment.comments[videoId] ? state.comment.comments[videoId] : []);
+    const loggedIn = useSelector(state => state.auth.loggedIn);
+
     const dispatch = useDispatch();
     let [newComment, setNewComment] = useState("");
 
     useEffect(() => {
         dispatch(fetchComments(videoId))
-    }, [])
+    }, [dispatch, videoId])
 
     const submitComment = () => {
         dispatch(postComment({text: newComment, videoId: videoId}));
@@ -62,16 +64,20 @@ const Comments = ({commentsEnabled, enableComments, videoId}) => {
 
             <Card sx={{width: "100%", overflowY: "scroll", overflowX: "hidden"}}>
                 <Close fontSize="large" sx={{position:"absolute", right: "20px"}} onClick={e => {enableComments(false); console.log("close comments", e)}}/>
-                <Card sx={{marginTop: "30px"}}>
-                    <CardContent>
-                        <Form className='form-horizontal'>
-                            <Form.Group controlId="comment">
-                                <Form.Control key="comment" onChange={e => setNewComment(e.target.value)} value={newComment} type="text" placeholder="What's on your mind?" />
-                            </Form.Group>
-                            <Button onClick={submitComment}>Submit</Button>
-                        </Form>
-                    </CardContent>
-                </Card>
+                {loggedIn ?
+                    <Card sx={{marginTop: "30px"}}>
+                        <CardContent>
+                            <Form className='form-horizontal'>
+                                <Form.Group controlId="comment">
+                                    <Form.Control key="comment" onChange={e => setNewComment(e.target.value)} value={newComment} type="text" placeholder="What's on your mind?" />
+                                </Form.Group>
+                                <Button onClick={submitComment}>Submit</Button>
+                            </Form>
+                        </CardContent>
+                    </Card>
+                    :
+                    null
+                }
                 <Card sx={{marginTop: "10px"}}>
                     {comments.map((comment) =>
                         <Grid container sx={{marginLeft: "0px"}} spacing={2} key={"comment" + comment._id}>

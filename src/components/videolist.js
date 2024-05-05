@@ -1,6 +1,6 @@
-import React, {useEffect, useRef, useState} from 'react'
+import React, {useEffect} from 'react'
 import './videolist.css'
-import {useSelector, useDispatch, connect} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
 import Video from "./video";
 import {fetchVideos} from "../actions/videoActions";
 const VideoList = () => {
@@ -11,7 +11,7 @@ const VideoList = () => {
 
     useEffect(() => {
         dispatch(fetchVideos())
-    }, [])
+    }, [dispatch])
 
     return (
         <div className="videos">

@@ -1,58 +1,72 @@
-import React, { Component } from 'react';
-import { submitLogin } from '../actions/authActions';
-import { connect } from 'react-redux';
-import { Form, Button } from 'react-bootstrap';
+import React, {useState} from 'react';
+import './comments.css'
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import {Close} from "@mui/icons-material";
+import {Button, Form} from "react-bootstrap";
+import {useDispatch, useSelector} from "react-redux";
+import {submitLogin, submitRegister} from "../actions/authActions";
+import {ToggleButton, ToggleButtonGroup} from "@mui/material";
 
-class LoginOld extends Component {
+const Login = ({loginEnabled, enableLogin}) => {
 
-    constructor(props) {
-        super(props);
-        this.updateDetails = this.updateDetails.bind(this);
-        this.login = this.login.bind(this);
+    const dispatch = useDispatch();
+    const loggedIn = useSelector(state => state.auth.loggedIn);
+    let [username, setUsername] = useState("");
+    let [password, setPassword] = useState("");
+    let [registerToggle, setRegisterToggle] = useState(false);
 
-        this.state = {
-            details:{
-                username: '',
-                password: ''
-            }
-        };
+    const login = () => {
+        dispatch(submitLogin({username: username, password: password}));
     }
 
-    updateDetails(event){
-        let updateDetails = Object.assign({}, this.state.details);
-
-        updateDetails[event.target.id] = event.target.value;
-        this.setState({
-            details: updateDetails
-        });
+    const register = () => {
+        dispatch(submitRegister({username: username, password: password}));
     }
 
-    login() {
-        const {dispatch} = this.props;
-        dispatch(submitLogin(this.state.details));
-    }
+    console.log("rerender login");
 
-    render(){
-        return (
-            <Form className='form-horizontal'>
-                <Form.Group controlId="username">
-                    <Form.Label>Email</Form.Label>
-                    <Form.Control onChange={this.updateDetails} value={this.state.details.username} type="email" placeholder="Enter email" />
-                </Form.Group>
+    return (
+        <div className={(loginEnabled && !loggedIn) ? "comment enable" : "comment"}>
 
-                <Form.Group controlId="password">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control onChange={this.updateDetails} value={this.state.details.password}  type="password" placeholder="Password" />
-                </Form.Group>
-                <Button onClick={this.login}>Sign in</Button>
-            </Form>
-        )
-    }
+            <Card sx={{width: "100%", overflowY: "scroll", overflowX: "hidden"}}>
+                <Close fontSize="large" sx={{position:"absolute", right: "20px"}} onClick={e => {enableLogin(false); console.log("close comments", e)}}/>
+                <Card sx={{marginTop: "30px"}}>
+                    <CardContent>
+                        <ToggleButtonGroup
+                            color="primary"
+                            value={registerToggle}
+                            exclusive
+                            onChange={(e, updated) => setRegisterToggle(updated)}
+                            aria-label="Platform"
+                            sx={{paddingBottom: "10px"}}
+                        >
+                            <ToggleButton value={false}>Sign in</ToggleButton>
+                            <ToggleButton value={true}>Register</ToggleButton>
+                        </ToggleButtonGroup>
+                        <Form className='form-horizontal'>
+                            <Form.Group controlId="username">
+                                <Form.Label>Username</Form.Label>
+                                <Form.Control onChange={e => setUsername(e.target.value)} value={username} type="email" placeholder="Username" />
+                            </Form.Group>
+
+                            <Form.Group controlId="password">
+                                <Form.Label>Password</Form.Label>
+                                <Form.Control onChange={e => setPassword(e.target.value)} value={password}  type="password" placeholder="Password" />
+                            </Form.Group>
+                            {registerToggle ?
+                                <Button onClick={register}>Register</Button>
+                                :
+                                <Button onClick={login}>Sign in</Button>
+                            }
+
+                        </Form>
+                    </CardContent>
+                </Card>
+            </Card>
+        </div>
+    )
 }
 
-const mapStateToProps = state => {
-    return {
-    }
-}
+export default Login;
 
-export default connect(mapStateToProps)(LoginOld);

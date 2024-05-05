@@ -3,7 +3,7 @@ import './video.css'
 import VideoFooter from './videofooter'
 import VideoSidebar from './videosidebar'
 import Comments from "./comments";
-import Login from "./login2";
+import Login from "./login";
 const Video = ({ id, url, channel, description, song, likes, shares, messages }) => {
     const [playing, setPlaying] = useState(false);
     const [commentsEnabled, setCommentsEnabled] = useState(false);
